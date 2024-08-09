@@ -5,33 +5,41 @@ plugins {
 	kotlin("plugin.spring") version "1.9.24"
 }
 
-group = "com.kopring"
-version = "0.0.1-SNAPSHOT"
-
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
+		languageVersion = JavaLanguageVersion.of(21)
 	}
 }
 
-repositories {
-	mavenCentral()
-}
+allprojects {
+	group = "com.kopring.studylogs"
+	version = "0.0.1-SNAPSHOT"
 
-dependencies {
-	implementation("org.springframework.boot:spring-boot-starter")
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-}
-
-kotlin {
-	compilerOptions {
-		freeCompilerArgs.addAll("-Xjsr305=strict")
+	repositories {
+		mavenCentral()
 	}
 }
 
-tasks.withType<Test> {
-	useJUnitPlatform()
+// https://github.com/kotest/kotest/releases
+val kotestVersion = "5.5.5"
+
+// Apply the plugins to all submodules
+subprojects {
+	apply(plugin = "org.springframework.boot")
+	apply(plugin = "io.spring.dependency-management")
+	apply(plugin = "org.jetbrains.kotlin.jvm")
+	apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+
+	dependencies {
+		implementation("org.jetbrains.kotlin:kotlin-reflect")
+		testImplementation("org.springframework.boot:spring-boot-starter-test")
+		testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+		testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
+		testImplementation ("io.kotest:kotest-property:$kotestVersion")
+		testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	}
+
+	tasks.withType<Test>().configureEach {
+		useJUnitPlatform()
+	}
 }

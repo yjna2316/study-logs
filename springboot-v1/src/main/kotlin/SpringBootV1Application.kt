@@ -1,11 +1,11 @@
-package com.kopring.study_logs
+package com.kopring
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class StudyLogsApplication
+class SpringBootV1Application
 
 fun main(args: Array<String>) {
-	runApplication<StudyLogsApplication>(*args)
+    runApplication<SpringBootV1Application>(*args)
 }
